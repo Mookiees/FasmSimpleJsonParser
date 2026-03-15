@@ -1,64 +1,30 @@
-# <div align="center">Simple JSON parser on FASM [x86]</div>
-<div align="center">Examples</div>
+# JSON Parser на FASM
 
-### - -
+Простой JSON‑парсер, написанный на ассемблере FASM (Flat Assembler) для Windows. Позволяет извлекать строковые и числовые значения из JSON‑строк.
 
-```
-format PE GUI 4.0
+## Особенности
 
-entry start
-include 'json_parser.asm'
-include '/WIN32A.INC'
+* Работа с числовыми значениями (целые числа).
+* Извлечение строковых значений.
+* Минимальные зависимости — использует только функции Windows API.
+* Консольное приложение для Windows (формат PE GUI).
 
-section '.data' data readable writeable
-      example        db        '{"ok": 0, "okey": 123}', 0
-      value          db        'ok', 0
+## Требования
 
-      IOHandle       dd        ?
-      IOUHandle      dd        ?
+* [FASM (Flat Assembler)](https://flatassembler.net/) — компилятор ассемблера.
+* Операционная система Windows (XP и выше).
+* Базовые знания ассемблера x86 и работы с Windows API.
 
-section '.code' code readable executable
-start:
+## Сборка проекта
 
-      call       [AllocConsole]
-      test       eax, eax
+1. Установите FASM.
+2. Поместите все файлы проекта в одну директорию.
+3. Откройте командную строку и перейдите в директорию проекта.
+4. Выполните команду для компиляции:
 
-      push       0
-      push       1
-      push       0
-      push       0x00000001 or 0x00000002
-      push       GENERIC_READ+GENERIC_WRITE
-      call       [CreateConsoleScreenBuffer]
-      mov        [_hscreenbuffer], eax
+   ```bash
+   fasm FasmSimpleJsonParser.asm
+В результате будет создан исполняемый файл your_project_name.exe.
 
-      push       eax
-      call       [SetConsoleActiveScreenBuffer]
-
-      push       value
-      push       example
-      call       get_int_el
-
-      push       0
-      push       0
-      push       1
-      push       eax
-      push       [_hscreenbuffer]
-      call       dword[WriteConsole]
-
-      push       0
-      call       [ExitProcess]
-
-section '.rdata' data readable writeable
-      _hscreenbuffer dd 00
-
-section '.idata' data import readable writeable
-library kernel,'kernel32.dll'
-import kernel,\
-         AllocConsole,                 'AllocConsole',                                  \
-         ExitProcess ,                 'ExitProcess' ,                                  \
-         CreateConsoleScreenBuffer,    'CreateConsoleScreenBuffer',                     \
-         SetConsoleActiveScreenBuffer, 'SetConsoleActiveScreenBuffer',                  \
-         WriteConsole,                 'WriteConsoleA'                                  
-```
-
-### - -
+## Вклад в проект
+Если вы хотите улучшить парсер (добавить поддержку вложенных объектов, массивов и т. д.), создайте Pull Request или откройте Issue с описанием идеи.
