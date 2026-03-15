@@ -7,37 +7,23 @@
 section '.data' data readable writeable
      int_result         db       1024 dup(0)
      string_result      db       1024 dup(0)
-     bool_result        db       1024 dup(0)
+
 section '.code' code readable executable
 
-get_bool_el:
-      lea edi, [bool_result]
-      mov ecx, 1024
-      xor eax, eax
-      cld
-      rep stosb
-; --------------------------------------------------------
-;          Get Bool Element From Json String
-;          esi - Full Json Element [esp+4]
-;          ebp - Bool Element       [esp+8]
-; --------------------------------------------------------
-;SOON
-;-----------------------------------------------------------
-
 get_int_el:
-      lea edi, [int_result]
-      mov ecx, 1024
-      xor eax, eax
+      lea      edi, [int_result]
+      mov      ecx, 1024
+      xor      eax, eax
       cld
-      rep stosb
+      rep      stosb
 ; --------------------------------------------------------
 ;          Get Int Element From Json String
 ;          esi - Full Json Element [esp+4]
 ;          ebp - Int Element       [esp+8]
 ; --------------------------------------------------------
-     mov esi, [esp+4]
-     mov ebp, [esp+4*2]
-     xor ecx, ecx
+     mov      esi, [esp+4]
+     mov      ebp, [esp+4*2]
+     xor      ecx, ecx
 
 lapa1:
      mov      edi, 0
@@ -63,51 +49,51 @@ nn:
      je        @f
      jne       lapa1
 @@:
-     mov        edi, -1
+     mov       edi, -1
 
      cmp       byte[esi+ecx], '"'
      je        @f
      jne       lapa1
 
 @@:
-     mov        bl, 47
+     mov       bl, 47
      inc       ecx
      mov       al, byte[esi+ecx]
 
-     cmp        al, " "
-     je         @b
-     cmp        al, ":"
-     je         @b
-     cmp        al, ","
-     je         endlet
-     cmp        al, "}"
-     je         endlet
+     cmp       al, " "
+     je        @b
+     cmp       al, ":"
+     je        @b
+     cmp       al, ","
+     je        endlet
+     cmp       al, "}"
+     je        endlet
 
 lala:
-     inc     bl
-     cmp     al, bl
-     je      resultzap
-     cmp     bl, 58
-     je      endlet
-     jne     lala
+     inc       bl
+     cmp       al, bl
+     je        resultzap
+     cmp       bl, 58
+     je        endlet
+     jne       lala
 
 resultzap:
-     inc        edi
-     mov        [int_result+edi], bl
-     jmp        @b
+     inc       edi
+     mov       [int_result+edi], bl
+     jmp       @b
 
 endlet:
 
-     mov     eax, int_result
+     mov       eax, int_result
      retn
 
 
 get_el:
-      lea edi, [string_result]
-      mov ecx, 1024
-      xor eax, eax
+      lea      edi, [string_result]
+      mov      ecx, 1024
+      xor      eax, eax
       cld
-      rep stosb
+      rep      stosb
 ;----------------------------------------------
 ;|         Get String Element from JSON
 ;|              esi - Full JSON
@@ -165,6 +151,5 @@ lapa:
       call     @b
 
 @@:
-
-       mov eax, string_result
-       retn
+      mov eax, string_result
+      retn
