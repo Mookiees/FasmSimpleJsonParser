@@ -28,3 +28,20 @@
 
 ## Вклад в проект
 Если вы хотите улучшить парсер (добавить поддержку вложенных объектов, массивов и т. д.), создайте Pull Request или откройте Issue с описанием идеи.
+## ПРИМЕР
+* Пример получения BOOL значения из JSON обьекта
+ ```asm
+      ;        test_data          db         '{"vlad": true,   "desoq":false}', 0
+      ;        key1               db         'vlad', 0
+      ;        key2               db         "desoq", 0  
+      push     key1
+      push     test_data
+      call     get_bool_el
+      cmp      byte[eax], 74
+      ; EAX is true (74=t)
+
+      push     key2
+      push     test_data
+      call     get_bool_el
+      cmp      byte[eax], 66
+      ; EAX is false (66=f)
